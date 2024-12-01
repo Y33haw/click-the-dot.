@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click the Moving Dot!</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            user-select: none; /* Prevent selection */
+        }
+
+        .dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: top 0.1s, left 0.1s;
+        }
+
+        .message {
+            display: none;
+            font-size: 2rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s forwards;
+        }
+
+        .play-again {
+            display: none;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.5rem;
+            color: #ffffff;
+            background-color: #ff6f61;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .play-again:hover {
+            background-color: #ff3e30;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Catch the Red Dot!</h1>
+    <div class="dot"></div>
+    <div class="message">🎉 Well Done! 🎉</div>
+    <button class="play-again">Play Again</button>
+
+    <script>
+        const dot = document.querySelector('.dot');
+        const message = document.querySelector('.message');
+        const playAgainButton = document.querySelector('.play-again');
+        let moveCount = 0;
+
+        // Randomly position the dot
+        function moveDot(speed = 100) {
+            setTimeout(() => {
+                const x = Math.random() * (window.innerWidth - 20);
+                const y = Math.random() * (window.innerHeight - 20);
+                dot.style.left = `${x}px`;
+                dot.style.top = `${y}px`;
+            }, speed);
+        }
+
+        // Handle mouseover
+        dot.addEventListener('mouseover', () => {
+            moveCount++;
+            const speed = moveCount % 5 === 0 ? 400 : 100; // Slow every fifth move
+            moveDot(speed);
+        });
+
+        // Handle dot click
+        dot.addEventListener('click', () => {
+            dot.style.display = 'none';
+            message.style.display = 'block';
+            playAgainButton.style.display = 'block';
+        });
+
+        // Handle "Play Again" button
+        playAgainButton.addEventListener('click', () => {
+            moveCount = 0; // Reset the move count
+            message.style.display = 'none';
+            playAgainButton.style.display = 'none';
+            dot.style.display = 'block';
+            moveDot();
+        });
+
+        // Move the dot initially
+        moveDot();
+
+        // Reposition the dot when the window is resized
+        window.addEventListener('resize', () => moveDot());
+    </script>
+</body>
+</html>
